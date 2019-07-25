@@ -5,7 +5,6 @@ public class Aula163_Entities_ExercicioFixacao {
 	private String product;
 	private double price;
 	private int quantity;
-	private double total;
 
 	public Aula163_Entities_ExercicioFixacao() {
 
@@ -42,12 +41,8 @@ public class Aula163_Entities_ExercicioFixacao {
 		this.quantity = quantity;
 	}
 
-	public double getTotal() {
-		return total;
-	}
-
-	public void total() {
-		total = price * quantity;
+	public double total() {
+		return price * quantity;
 
 	}
 }

@@ -1,11 +1,12 @@
 package Secao_12_Trabalhando_com_Arquivos;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -24,40 +25,36 @@ public class Aula163_ExercicioProposto {
 		Scanner ler = new Scanner(System.in);
 		List<Aula163_Entities_ExercicioFixacao> list = new ArrayList<>();
 
-		System.out.print("Quantos Produtos Adicionar: ");
-		int addProduct = ler.nextInt();
-		ler.nextLine();
-		for (int cc = 0; cc < addProduct; cc++) {
-			System.out.println("==============");
-			System.out.printf(" #%d Registro: %n", (cc+1));
-			System.out.print("Informe o Produto: ");
-			String product = ler.nextLine();
-			System.out.print("Valor do produto: ");
-			double price = ler.nextDouble();
-			System.out.print("Quantidade: ");
-			int quantity = ler.nextInt();
-			ler.nextLine();
-			list.add(new Aula163_Entities_ExercicioFixacao(product, price, quantity));
-		}	
-		System.out.print("Deseja exportar o arquivo (Y/N) ? ");
-		String export = ler.nextLine().toUpperCase();
-		if (export.equals("Y")) {
-			System.out.println("Enter a folder path: ");
-			String strPath = ler.nextLine()+"\\summit.txt"; //Concatenação já adicionao o formato do arquivo e a sua extenção.
-			File path = new File(strPath);
-			try (BufferedWriter exportY = new BufferedWriter(new FileWriter(path, true))) {
-				for (Aula163_Entities_ExercicioFixacao X : list) {
-					X.total();// Antes de imprimir já adiciona o total da linha no arquivo gerado.
-					exportY.write(X.getProdut() + " - " + String.format("%.2f",X.getTotal()));
-					exportY.newLine();
-				}
-			} catch (InputMismatchException e) {
-				System.out.println("Erro" + e.getMessage());
-			} catch (IOException e) {
-				System.out.println("Erro" + e.getMessage());
-				e.printStackTrace();
+		System.out.println("Enter file Path: ");
+		String sourceFileStr = ler.nextLine(); // Entrar com o Caminho
+		File sourceFile = new File(sourceFileStr); // Abrir um Arquivo a partir do endereço passado na variavel
+		String sourceFolderStr = sourceFile.getParent();
+
+		boolean sucess = new File(sourceFolderStr + "\\out").mkdir();
+		String targetFileStr = sourceFileStr + "\\out\\sumary.csv";
+
+		try (BufferedReader br = new BufferedReader(new FileReader(sourceFileStr))) {
+			String itemCsv = br.readLine();
+			while (itemCsv != null) {
+				String[] fields = itemCsv.split(",");
+				String name = fields[0];
+				double price = Double.parseDouble(fields[1]);
+				int quantity = Integer.parseInt(fields[2]);
+				list.add(new Aula163_Entities_ExercicioFixacao(name, price, quantity));
+				itemCsv = br.readLine();
 			}
+			try (BufferedWriter bw = new BufferedWriter(new FileWriter(targetFileStr))) {
+				for (Aula163_Entities_ExercicioFixacao item : list) {
+					bw.write(item.getProdut() + ", " +String.format("%.2f", item.total()));
+				}
+			} catch (IOException e) {
+				System.out.println("Error wrinting file: " + e.getMessage());
+
+			}
+		} catch (IOException e) {
+			System.out.println("Erro reading file: " + e.getMessage());
 		}
+
 		ler.close();
 	}
 
