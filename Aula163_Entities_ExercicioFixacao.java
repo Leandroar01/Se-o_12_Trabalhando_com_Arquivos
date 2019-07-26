@@ -45,4 +45,14 @@ public class Aula163_Entities_ExercicioFixacao {
 		return price * quantity;
 
 	}
+	
+	public String toString() {
+		return "Name: "
+				+getProdut()
+				+" Valor: "
+				+getPrice()
+				+" Qde: "
+				+getQuantity();
+		
+	}
 }

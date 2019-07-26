@@ -1,10 +1,8 @@
 package Secao_12_Trabalhando_com_Arquivos;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +28,10 @@ public class Aula163_ExercicioProposto {
 		File sourceFile = new File(sourceFileStr); // Abrir um Arquivo a partir do endereço passado na variavel
 		String sourceFolderStr = sourceFile.getParent();
 
+		@SuppressWarnings("unused")
 		boolean sucess = new File(sourceFolderStr + "\\out").mkdir();
-		String targetFileStr = sourceFileStr + "\\out\\sumary.csv";
+		@SuppressWarnings("unused")
+		String targetFileStr = sourceFileStr+ "\\out\\sumary.csv";
 
 		try (BufferedReader br = new BufferedReader(new FileReader(sourceFileStr))) {
 			String itemCsv = br.readLine();
@@ -43,14 +43,15 @@ public class Aula163_ExercicioProposto {
 				list.add(new Aula163_Entities_ExercicioFixacao(name, price, quantity));
 				itemCsv = br.readLine();
 			}
-			try (BufferedWriter bw = new BufferedWriter(new FileWriter(targetFileStr))) {
-				for (Aula163_Entities_ExercicioFixacao item : list) {
-					bw.write(item.getProdut() + ", " +String.format("%.2f", item.total()));
-				}
-			} catch (IOException e) {
-				System.out.println("Error wrinting file: " + e.getMessage());
-
-			}
+					System.out.println(list);
+//			try (BufferedWriter bw = new BufferedWriter(new FileWriter(targetFileStr))) {
+//				for (Aula163_Entities_ExercicioFixacao item : list) {
+//					bw.write(item.getProdut() + ", " +String.format("%.2f", item.total()));
+//				}
+//			} catch (IOException e) {
+//				System.out.println("Error wrinting file: " + e.getMessage());
+//
+//			}
 		} catch (IOException e) {
 			System.out.println("Erro reading file: " + e.getMessage());
 		}
